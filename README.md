@@ -157,14 +157,14 @@ The object detection algorithm will enable the automated driving system to recog
 
 
 ### Set up
-Dockerfileを用いてビルドを行うことができます。("build"ディレクトリに移動して行ってください。)
+You can build using the Dockerfile. (Go to the "build" directory to do this).  
 
 #### Requirements
 - NVIDIA GPU with the latest driver installed
 - docker / nvidia-docker
 
 #### Build
-下記の手順に沿ってビルドを行ってください。  
+Please follow the steps below to build.  
 1. Build the image  
 `docker build -t project-dev -f Dockerfile .`
 
@@ -172,7 +172,7 @@ Dockerfileを用いてビルドを行うことができます。("build"ディ�
 `docker run --gpus all -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ --network=host -ti project-dev bash`
 
 #### Setup
-コンテナの作成が完了したら、コンテナ内にgsutilをインストールする必要があります。  
+Once the container has been created, gsutil must be installed in the container.   
 `curl https://sdk.cloud.google.com | bash`  
 
 gsutilのインストールが完了したら、authを行います。  
