@@ -141,10 +141,42 @@ python inference_video.py --labelmap_path label_map.pbtxt --model_path experimen
 ## Submission Template
 
 ### Project overview
-This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
+
+Automated driving systems require a wide variety of sensors to be installed in the vehicle. The main sensors are cameras, LiDAR, and radar.
+The roles of each sensor are as follows.
+- Camera
+    - To acquire data from outside the vehicle in the form of video images. By applying image analysis to the acquired data, the automatic driving system can identify oncoming vehicles, pedestrians, white lines, signs, etc.
+- LiDAR
+    - Uses optical technology to measure the distance to an object and the direction in which the object is located. The acquired data can be analyzed to determine the three-dimensional structure of the object.
+- Millimeter wave radar
+    - This sensor applies millimeter waves with a wavelength of approximately 1mm~1cm and can detect obstacles up to 100m~200m in front of and behind the vehicle.
+
+
+In this project, data obtained from the camera will be used to implement an object detection algorithm.
+The object detection algorithm will enable the automated driving system to recognize oncoming vehicles, pedestrians, white lines, etc. as mentioned above.
+
 
 ### Set up
-This section should contain a brief description of the steps to follow to run the code for this repository.
+Dockerfileを用いてビルドを行うことができます。("build"ディレクトリに移動して行ってください。)
+
+#### Requirements
+- NVIDIA GPU with the latest driver installed
+- docker / nvidia-docker
+
+#### Build
+下記の手順に沿ってビルドを行ってください。
+1. Build the image
+'docker build -t project-dev -f Dockerfile .'
+
+2. Create a container
+`docker run --gpus all -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ --network=host -ti project-dev bash`
+
+#### Setup
+コンテナの作成が完了したら、コンテナ内にgsutilをインストールする必要があります。
+`curl https://sdk.cloud.google.com | bash`
+
+gsutilのインストールが完了したら、authを行います。
+`gcloud auth login`
 
 ### Dataset
 #### Dataset analysis
