@@ -166,17 +166,31 @@ You can build using the Dockerfile. (Go to the "build" directory to do this).
 #### Build
 Please follow the steps below to build.  
 1. Build the image  
-```docker build -t project-dev -f Dockerfile .```
+
+```
+docker build -t project-dev -f Dockerfile .
+```
 
 2. Create a container  
-```docker run --gpus all -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ --network=host -ti project-dev bash```
+
+```
+docker run --gpus all -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ --network=host -ti project-dev bash
+```
 
 #### Setup
 Once the container has been created, gsutil must be installed in the container.   
-```curl https://sdk.cloud.google.com | bash```  
+
+```
+curl https://sdk.cloud.google.com | bash
+```  
+
 
 After installation of gsutil is complete, perform auth.   
-```gcloud auth login```  
+```
+gcloud auth login
+```  
+
+
 
 ### Dataset
 #### Dataset analysis
