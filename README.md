@@ -164,19 +164,19 @@ Dockerfileを用いてビルドを行うことができます。("build"ディ�
 - docker / nvidia-docker
 
 #### Build
-下記の手順に沿ってビルドを行ってください。
-1. Build the image
-'docker build -t project-dev -f Dockerfile .'
+下記の手順に沿ってビルドを行ってください。  
+1. Build the image  
+`docker build -t project-dev -f Dockerfile .`
 
-2. Create a container
+2. Create a container  
 `docker run --gpus all -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ --network=host -ti project-dev bash`
 
 #### Setup
-コンテナの作成が完了したら、コンテナ内にgsutilをインストールする必要があります。
-`curl https://sdk.cloud.google.com | bash`
+コンテナの作成が完了したら、コンテナ内にgsutilをインストールする必要があります。  
+`curl https://sdk.cloud.google.com | bash`  
 
-gsutilのインストールが完了したら、authを行います。
-`gcloud auth login`
+gsutilのインストールが完了したら、authを行います。  
+`gcloud auth login`  
 
 ### Dataset
 #### Dataset analysis
