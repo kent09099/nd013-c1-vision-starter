@@ -149,7 +149,7 @@ The roles of each sensor are as follows.
 - LiDAR
     - Uses optical technology to measure the distance to an object and the direction in which the object is located. The acquired data can be analyzed to determine the three-dimensional structure of the object.
 - Millimeter wave radar
-    - This sensor applies millimeter waves with a wavelength of approximately 1mm~1cm and can detect obstacles up to 100m~200m in front of and behind the vehicle.
+    - This sensor applies millimeter waves with a wavelength of approximately 1mm-1cm and can detect obstacles up to 100m-200m in front of and behind the vehicle.
 
 
 In this project, data obtained from the camera will be used to implement an object detection algorithm.
@@ -175,7 +175,7 @@ Please follow the steps below to build.
 Once the container has been created, gsutil must be installed in the container.   
 `curl https://sdk.cloud.google.com | bash`  
 
-gsutilのインストールが完了したら、authを行います。  
+After installation of gsutil is complete, perform auth.   
 `gcloud auth login`  
 
 ### Dataset
