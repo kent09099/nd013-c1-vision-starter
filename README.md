@@ -387,4 +387,4 @@ multiscale_anchor_generator {
 ### Concluison
 - Increasing batch size stabilized the training process of the model.
 - Data augumentation by brightness adjustment and black patches had no effect on the model performance.
-- Adjustment of aspect ratio of anchor generator had little of no effect on the model performance.
+- Adjustment of aspect ratio of anchor generator had little or no effect on the model performance.
