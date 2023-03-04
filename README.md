@@ -193,14 +193,163 @@ gcloud auth login
 
 
 ### Dataset
-#### Dataset analysis
-This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
+#### Overview of the dataset
+We will use WAYMO open dataset for this project, which is a dataset of images of urban environments containing annotated cyclists, pedestrians and vehicles. 
+First, we see the overview of the dataset below using Exploratory Data Analysis.ipynb.
+
+#### Weather conditions
+We can see that the dataset contains various weather conditions. 
+- Sunny  
+![Sunny image example](images/sunny.png)  
+
+- Cloudy  
+![Cloudy image example](images/cloudy.png)  
+
+- Rainy  
+![Rainy image example](images/rainy.png)  
+
+- Foggy  
+![Foggy image example](images/foggy.png)   
+
+- Snowy  
+    - I didn't see snowfall conditions while checking the dataset. Therefore, probably there aren't or very few images of snowfall conditions.
+
+
+#### Time
+The dataset also includes images from both day and night time.  
+- Day  
+
+![Day time image example](images/day.png)
+- Night  
+
+![Night time image example](images/night.png)
+  
+
+#### Classes
+As menthoned above, the dataset contains cyclists, pedestrians and vehicles classes. In the images above, cars are highlighted as red, pedestrians are blue, and cyclists are yellow.
+
+
+
+***  
+
+
+
+#### More in-depth analysis of the dataset
+Next, we see more detailed analysis of the dataset by checking some distribustions obtained from the images.
+
+#### Class Distribution of the bounding boxes
+First, we see the class distribution diagram to check class imbalances. Below is the graph created in Exploratory Data Analysis.ipynb using 20000 random sampling from the dataset.
+
+image
+
+
+- We can see that the bounding box labels are mostly labeled as Car, and followed by Pedestrian labels.
+- And there are very few bounding boxes labeled as Cyclist.
+- The class imbalance may affect the training of the model. For example, since the number of images containing cyclist is considered very small, it will be difficult to recognize cyclists correctly.
+
+
+
+#### Bounding box aspect ratios Distribution
+Aspect ratios distribution may be important to configure the anchor box related parameters of the model. Below is the graph created in Exploratory Data Analysis.ipynb.
+
+##### Aspect ratios distribution for all classes
+
+image
+
+- We can see that most of the aspect ratios of the bounding boxes are in between 0-2.
+
+##### Class-wise aspect-ratios distribution
+
+image
+
+Red: Car, Blue: Pedestrian, Yellow: Cyclist
+
+
+- We can see the difference in distribution and it seems that the aspect ratios of Cars are slightly larger than that of Pedestrian.
+- This is probably because the shape of Car is landscape, and that of Pedestrian is portrait.
+
+
+
+#### Bounding box sizes Distribution
+The size of the bounding boxes may also affect configuring the anchor box parameters of the model. Also, class-wise distribution will be informative to analyze the data and configure the model.  
+
+##### Box sizes distribution of all classes
+
+image
+
+- We can see the most of the sizes are < 10000.
+
+##### Class-wise Box sizes distribution
+
+image
+
+Red: Car, Blue: Pedestrian, Yellow: Cyclist  
+
+- It seems that there is no significant difference in between the classes.
+
+***
+
+
 #### Cross validation
-This section should detail the cross validation strategy and justify your approach.
+- The cross validation has already been done and the dataset was splited into train/eval/test.
+- We will use train/eval dataset to train the model, and test dataset to test the model created.
 
 ### Training
 #### Reference experiment
-This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
+By default, the training process seems to be unstable, so I only changed batch size to 5. Following is the training and validtation results obtained by tensorboard.
+
+##### Loss  
+![Loss](result/default_batch5/Loss.png)
+
+- We can see the validation loss decreases with the train loss. 
+
+
+##### Precision and Recall
+![Precision](result/default_batch5/Loss.png)
+![Recall](result/default_batch5/Recall.png)
+
+- We can see that precision and recall also improving with the training process.
+- In the following section, we try some changes in the config file and check improvements based on this result.
+
 
 #### Improve on the reference
-This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
+##### Data Augumentation
+- Based on EDA, we can see that there are various lighting conditions in the dataset. So first, I added brightness adjust augumentation to the config file to make the model robust to these conditions.
+
+- Also I added black patches to config file, so combined with what was included by default, I used the following augumentations:
+	- Random Horizontal flip
+    - Random Crop
+    - Random Adjust Brightness
+    - Random Black Pathes
+    
+##### Loss
+
+image
+
+- We can see almost no changes in losses compared to the default.
+
+##### Precision and Recall
+
+image
+
+- For precision and recall, it seems no change or rather worse than the default.
+- Therefore, I adapted the default augmentation (Random horizontal flip + Random crop) as augumentation.
+
+##### Aspect ratio of bounding boxes  
+In the EDA section, we saw that aspect ratio of almost all bounding boxes are in between 0-2. So I changed "multiscale_anchor_generator"  in config file to following:
+
+```
+multiscale_anchor_generator {
+        min_level: 3
+        max_level: 7
+        anchor_scale: 4.0
+        aspect_ratios: 1.0
+        aspect_ratios: 1.5
+        aspect_ratios: 0.5
+        scales_per_octave: 2
+      }
+```
+
+##### Loss
+##### Precision and Recall
+
