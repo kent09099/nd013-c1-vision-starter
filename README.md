@@ -240,7 +240,7 @@ Next, we see more detailed analysis of the dataset by checking some distribustio
 #### Class Distribution of the bounding boxes
 First, we see the class distribution diagram to check class imbalances. Below is the graph created in Exploratory Data Analysis.ipynb using 20000 random sampling from the dataset.
 
-image
+![class distribution](images/class_distribution.png)
 
 
 - We can see that the bounding box labels are mostly labeled as Car, and followed by Pedestrian labels.
@@ -254,13 +254,13 @@ Aspect ratios distribution may be important to configure the anchor box related 
 
 ##### Aspect ratios distribution for all classes
 
-image
+![aspect ratio distribution all classes](images/aspect_ratio_all.png)
 
 - We can see that most of the aspect ratios of the bounding boxes are in between 0-2.
 
-##### Class-wise aspect-ratios distribution
+##### Class-wise aspect ratio distribution
 
-image
+![class-wise aspect ratio distribution](images/aspect_ratio_cls.png)
 
 Red: Car, Blue: Pedestrian, Yellow: Cyclist
 
@@ -275,13 +275,13 @@ The size of the bounding boxes may also affect configuring the anchor box parame
 
 ##### Box sizes distribution of all classes
 
-image
+![box sizes distribution](images/box_sizes_all.png)
 
 - We can see the most of the sizes are < 10000.
 
 ##### Class-wise Box sizes distribution
 
-image
+![box sizes distribution](images/box_sizes_cls.png)
 
 Red: Car, Blue: Pedestrian, Yellow: Cyclist  
 
@@ -296,23 +296,41 @@ Red: Car, Blue: Pedestrian, Yellow: Cyclist
 
 ### Training
 #### Reference experiment
-By default, the training process seems to be unstable, so I only changed batch size to 5. Following is the training and validtation results obtained by tensorboard.
+Below is the training results of the default model.
 
 ##### Loss  
+![Loss](result/default/Loss.png)
+
+- We can see that training is unstable.
+- It would be due to batch size or optimizer.
+
+
+##### Precision and Recall
+![Precision](result/default/Loss.png)
+![Recall](result/default/Recall.png)
+
+- Training is unstable, so precision and recall are also low.
+- In the following section, we try some changes in the config file and check improvements based on this result.
+
+***
+
+#### Improve on the reference
+##### Batch size
+By default, the training process seems to be unstable, so I only changed batch size to 5. 
+
+##### Loss
 ![Loss](result/default_batch5/Loss.png)
 
 - We can see the validation loss decreases with the train loss. 
 
-
 ##### Precision and Recall
-![Precision](result/default_batch5/Loss.png)
+![Precision](result/default_batch5/Precision.png)
 ![Recall](result/default_batch5/Recall.png)
 
 - We can see that precision and recall also improving with the training process.
-- In the following section, we try some changes in the config file and check improvements based on this result.
+- It seems that batch size stabilized the training process, in the next section, we discuss data augumentation.
 
 
-#### Improve on the reference
 ##### Data Augumentation
 - Based on EDA, we can see that there are various lighting conditions in the dataset. So first, I added brightness adjust augumentation to the config file to make the model robust to these conditions.
 
@@ -324,15 +342,17 @@ By default, the training process seems to be unstable, so I only changed batch s
     
 ##### Loss
 
-image
+![Loss](result/aug_bri_patch/Loss.png)
 
-- We can see almost no changes in losses compared to the default.
+- We can see almost no changes in losses compared to the previous section.
 
 ##### Precision and Recall
 
-image
+![Precision](result/aug_bri_patch/Precision.png)
+![Recall](result/aug_bri_patch/Recall.png)
 
-- For precision and recall, it seems no change or rather worse than the default.
+
+- For precision and recall, it seems no change or rather worse than the previous section.
 - Therefore, I adapted the default augmentation (Random horizontal flip + Random crop) as augumentation.
 
 ##### Aspect ratio of bounding boxes  
@@ -351,5 +371,20 @@ multiscale_anchor_generator {
 ```
 
 ##### Loss
-##### Precision and Recall
+![Loss](result/ch_aspect_ratio/Loss.png)
 
+- There seems to little or no changes in Loss.
+
+##### Precision and Recall
+![Precision](result/ch_aspect_ratio/Precision.png)
+![Recall](result/ch_aspect_ratio/Recall.png)
+
+- In Precision and Recall also little or no difference.
+- Maybe we need to set other parameter in anchor_generator such as ssd_anchor_generator.
+
+***
+
+### Concluison
+- Increasing batch size stabilized the training process of the model.
+- Data augumentation by brightness adjustment and black patches had no effect on the model performance.
+- Adjustment of aspect ratio of anchor generator had little of no effect on the model performance.
